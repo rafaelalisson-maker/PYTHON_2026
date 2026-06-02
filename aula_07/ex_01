@@ -1,0 +1,8 @@
+from datetime import datetime
+
+x = int (input("informe uma data:"))
+print (x)
+
+d = datetime.strptime(input("informe uma data: "), "%d/%m/%y")
+print (d)
+print (d.strftime())
