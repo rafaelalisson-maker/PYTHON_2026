@@ -1,5 +1,5 @@
 from datetime import datetime
-class paciente 
+class paciente: 
    def __init__(self, id, n, c, t, nasc):
        self.set_id (id)
        self.set_n (n)
