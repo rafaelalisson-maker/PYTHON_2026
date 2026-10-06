@@ -1,6 +1,5 @@
 import json
-
-from models.horario import Horario
+from models.horario import horario
 
 
 class HorarioDAO:
@@ -16,7 +15,7 @@ class HorarioDAO:
         self.__salvar()
 
     def listar(self):
-        return self.__objetos
+        return list(self.__objetos)
 
     def listar_id(self, id):
         return next((obj for obj in self.__objetos if obj.get_id() == id), None)
@@ -43,7 +42,7 @@ class HorarioDAO:
         except (FileNotFoundError, json.JSONDecodeError):
             return
 
-        self.__objetos = [Horario.from_json(dicionario) for dicionario in lista]
+        self.__objetos = [horario.from_json(dicionario) for dicionario in lista]
 
     def __salvar(self):
         with open(self.__arquivo, mode="w", encoding="utf-8") as arquivo:

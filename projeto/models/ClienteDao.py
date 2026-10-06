@@ -8,7 +8,6 @@ class ClienteDAO:
         self.__abrir()
 
     def inserir(self, obj):
-        # gerar um novo id com o maior valor existente mais um
         id = 0
         if len(self.__objetos) > 0:
             for aux in self.__objetos:
