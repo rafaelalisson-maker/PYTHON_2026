@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "nome": "admin",
+    "email": "admin",
+    "fone": "fone",
+    "senha": "1234"
+  },
+  {
+    "id": 2,
+    "nome": "alisson ",
+    "email": "figuras231@gmail.com",
+    "fone": "84988454454",
+    "senha": "2211"
+  },
+  {
+    "id": 3,
+    "nome": "gilbert",
+    "email": "gilbert@email.com",
+    "fone": "99999999",
+    "senha": "123"
+  }
+]

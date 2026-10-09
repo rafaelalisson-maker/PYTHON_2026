@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import time
 
-from projeto.models.service import Service
+from service import Service
 
 
 class ManterClienteUI:
 
+    @staticmethod
     def main():
         st.header("Cadastro de Clientes")
 
@@ -26,6 +27,7 @@ class ManterClienteUI:
         with tab4:
             ManterClienteUI.excluir()
 
+    @staticmethod
     def listar():
         clientes = Service.cliente_listar()
 
@@ -40,6 +42,7 @@ class ManterClienteUI:
             df = pd.DataFrame(lista_dict)
             st.dataframe(df)
 
+    @staticmethod
     def inserir():
         nome = st.text_input("Informe o nome")
         email = st.text_input("Informe o e-mail")
@@ -53,6 +56,7 @@ class ManterClienteUI:
             time.sleep(2)
             st.rerun()
 
+    @staticmethod
     def atualizar():
         clientes = Service.cliente_listar()
 
@@ -90,7 +94,10 @@ class ManterClienteUI:
                 )
 
                 st.success("Cliente atualizado com sucesso")
+                time.sleep(2)
+                st.rerun()
 
+    @staticmethod
     def excluir():
         clientes = Service.cliente_listar()
 
@@ -108,3 +115,5 @@ class ManterClienteUI:
                 Service.cliente_excluir(cliente_id)
 
                 st.success("Cliente excluído com sucesso")
+                time.sleep(2)
+                st.rerun()

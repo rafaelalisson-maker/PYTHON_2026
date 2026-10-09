@@ -1,5 +1,6 @@
-from models.cliente import Cliente
 import json
+from models.cliente import Cliente
+
 
 class ClienteDAO:
     def __init__(self):
@@ -8,48 +9,52 @@ class ClienteDAO:
         self.__abrir()
 
     def inserir(self, obj):
-        id = 0
-        if len(self.__objetos) > 0:
-            for aux in self.__objetos:
-                if aux.get_id() > id: id = aux.get_id()
-        obj.set_id(id + 1)
+        maior_id = max(
+            (cliente.get_id() for cliente in self.__objetos),
+            default=0
+        )
+        obj.set_id(maior_id + 1)
         self.__objetos.append(obj)
         self.__salvar()
 
-    def listar(self):                
-        return self.__objetos
+    def listar(self):
+        return list(self.__objetos)
 
     def listar_id(self, id):
         for obj in self.__objetos:
-            if obj.get_id() == id: return obj
+            if obj.get_id() == id:
+                return obj
         return None
 
     def atualizar(self, obj):
-        aux = self.listar_id(obj.get_id())
-        if aux != None:
-            self.__objetos.remove(aux)
-            self.__objetos.append(obj)
+        atual = self.listar_id(obj.get_id())
+        if atual is not None:
+            indice = self.__objetos.index(atual)
+            self.__objetos[indice] = obj
             self.__salvar()
 
     def excluir(self, id):
-        aux = self.listar_id(id)
-        if aux != None:
-            self.__objetos.remove(aux)
+        obj = self.listar_id(id)
+        if obj is not None:
+            self.__objetos.remove(obj)
             self.__salvar()
 
-    def __abrir(self):  
-        try:  
-            arquivo = open(self.__arquivo, mode = "r")
-            list_dic = json.load(arquivo)
-            arquivo.close()
+    def __abrir(self):
+        try:
+            with open(self.__arquivo, "r", encoding="utf-8") as arquivo:
+                lista = json.load(arquivo)
+            self.__objetos = [
+                Cliente.from_json(dicionario)
+                for dicionario in lista
+            ]
+        except (FileNotFoundError, json.JSONDecodeError):
             self.__objetos = []
-            for dic in list_dic:
-                obj = Cliente.from_json(dic)
-                self.__objetos.append(obj)
-        except FileNotFoundError:
-            pass
 
-    def __salvar(self):    
-        arquivo = open(self.__arquivo, mode = "w")
-        json.dump(self.__objetos, arquivo, default = Cliente.to.json, indent = 2)
-        arquivo.close()
+    def __salvar(self):
+        with open(self.__arquivo, "w", encoding="utf-8") as arquivo:
+            json.dump(
+                [obj.to_json() for obj in self.__objetos],
+                arquivo,
+                ensure_ascii=False,
+                indent=2
+            )

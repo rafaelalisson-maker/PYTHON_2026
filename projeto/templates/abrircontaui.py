@@ -20,6 +20,5 @@ class AbrirContaUI:
                 time.sleep(2)
                 st.rerun()
 
-# Chamada para execução da interface
 if __name__ == "__main__":
     AbrirContaUI.main()
