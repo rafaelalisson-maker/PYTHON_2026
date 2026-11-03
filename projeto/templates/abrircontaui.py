@@ -15,10 +15,14 @@ class AbrirContaUI:
             if not nome or not email or not senha:
                 st.error("Preencha todos os campos obrigatórios.")
             else:
-                Service.cliente_inserir(nome, email, fone, senha)
-                st.success("Conta criada com sucesso!")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    Service.cliente_inserir(nome, email, fone, senha)
+                except ValueError as exc:
+                    st.error(str(exc))
+                else:
+                    st.success("Conta criada com sucesso!")
+                    time.sleep(2)
+                    st.rerun()
 
 if __name__ == "__main__":
     AbrirContaUI.main()

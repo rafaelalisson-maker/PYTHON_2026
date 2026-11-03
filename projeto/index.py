@@ -1,5 +1,4 @@
 import streamlit as st
-
 from templates.manterclienteui import ManterClienteUI
 from templates.manterservicoui import ManterServicoUI
 from templates.manterhorarioui import ManterHorarioUI
@@ -14,7 +13,8 @@ from templates.abrirminhaagendaui import AbrirMinhaAgendaUI
 from templates.visualizarmeusservicosui import VisualizarMeusServicosUI
 from templates.visualizarminhaagendaui import VisualizarMinhaAgendaUI
 from templates.confirmarservicoui import ConfirmarServicoUI
-
+from templates.listarhorariosconfirmadoshojeui import ListarHorariosConfirmadosHojeUI
+from templates.listaragendaprofissionalui import ListarAgendaProfissionalUI
 from service import Service
 
 
@@ -70,6 +70,8 @@ class IndexUI:
                 "Horários",
                 "Profissionais",
                 "Atendimentos",
+                "Horários Confirmados Hoje",
+                "Agenda do Profissional",
             ],
         )
         if op == "Clientes":
@@ -82,6 +84,10 @@ class IndexUI:
             ManterProfissionalUI.main()
         if op == "Atendimentos":
             ManterAtendimentoUI.main()
+        if op == "Horários Confirmados Hoje":
+            ListarHorariosConfirmadosHojeUI.main()
+        if op == "Agenda do Profissional":
+            ListarAgendaProfissionalUI.main()
 
     @staticmethod
     def sair_do_sistema():
@@ -112,11 +118,9 @@ class IndexUI:
 
     @staticmethod
     def main():
-        # verifica se existe o usuário admin
         Service.cliente_criar_admin()
-        # monta o sidebar
-        IndexUI.sidebar()
 
+        IndexUI.sidebar()
 
 if __name__ == "__main__":
     IndexUI.main()

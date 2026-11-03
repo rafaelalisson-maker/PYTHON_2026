@@ -47,14 +47,17 @@ class ManterClienteUI:
         nome = st.text_input("Informe o nome")
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
+        senha = st.text_input("Informe a senha", type="password")
 
         if st.button("Inserir"):
-            Service.cliente_inserir(nome, email, fone)
-
-            st.success("Cliente inserido com sucesso")
-
-            time.sleep(2)
-            st.rerun()
+            try:
+                Service.cliente_inserir(nome, email, fone, senha)
+            except ValueError as exc:
+                st.error(str(exc))
+            else:
+                st.success("Cliente inserido com sucesso")
+                time.sleep(2)
+                st.rerun()
 
     @staticmethod
     def atualizar():
@@ -86,16 +89,20 @@ class ManterClienteUI:
             if st.button("Atualizar"):
                 cliente_id = op.get_id()
 
-                Service.cliente_atualizar(
-                    cliente_id,
-                    nome,
-                    email,
-                    fone
-                )
-
-                st.success("Cliente atualizado com sucesso")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    Service.cliente_atualizar(
+                        cliente_id,
+                        nome,
+                        email,
+                        fone,
+                        op.get_senha()
+                    )
+                except ValueError as exc:
+                    st.error(str(exc))
+                else:
+                    st.success("Cliente atualizado com sucesso")
+                    time.sleep(2)
+                    st.rerun()
 
     @staticmethod
     def excluir():
@@ -112,8 +119,11 @@ class ManterClienteUI:
             if st.button("Excluir"):
                 cliente_id = op.get_id()
 
-                Service.cliente_excluir(cliente_id)
-
-                st.success("Cliente excluído com sucesso")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    Service.cliente_excluir(cliente_id)
+                except ValueError as exc:
+                    st.error(str(exc))
+                else:
+                    st.success("Cliente excluído com sucesso")
+                    time.sleep(2)
+                    st.rerun()
