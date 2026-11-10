@@ -8,7 +8,7 @@ from models.horariodao import HorarioDAO
 from models.atendimento import Atendimento
 from models.atendimentoDao import AtendimentoDAO
 from models.profissional import Profissional
-from models.profissionalDao import profissionalDao
+from models.profissionalDao import ProfissionalDAO
 
 
 class Service:
@@ -294,7 +294,7 @@ class Service:
     def profissional_inserir(nome, email, especialidade, senha):
         profissional = Profissional(0, nome, email, especialidade, senha)
         Service._validar_email_profissional(profissional.get_email())
-        profissionalDao().inserir(profissional)
+        ProfissionalDAO().inserir(profissional)
 
     @staticmethod
     def cliente_alterar_senha(id, nova_senha):
@@ -305,17 +305,17 @@ class Service:
 
     @staticmethod
     def profissional_listar():
-        return profissionalDao().listar()
+        return ProfissionalDAO().listar()
 
     @staticmethod
     def profissional_listar_id(id):
-        return profissionalDao().listar_id(id)
+        return ProfissionalDAO().listar_id(id)
 
     @staticmethod
     def profissional_atualizar(id, nome, email, especialidade, senha):
         profissional = Profissional(id, nome, email, especialidade, senha)
         Service._validar_email_profissional(profissional.get_email(), id)
-        profissionalDao().atualizar(profissional)
+        ProfissionalDAO().atualizar(profissional)
 
     @staticmethod
     def profissional_excluir(id):
@@ -326,7 +326,7 @@ class Service:
             raise ValueError(
                 "Não é possível excluir um profissional com horário cadastrado."
             )
-        profissionalDao().excluir(id)
+        ProfissionalDAO().excluir(id)
 
     @staticmethod
     def _validar_email_profissional(email, profissional_id=None):

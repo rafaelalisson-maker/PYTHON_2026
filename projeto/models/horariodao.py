@@ -1,70 +1,34 @@
 import json
+from models.dao import DAO
 from models.horario import Horario
 
 
-class HorarioDAO:
-    def __init__(self):
-        self.__arquivo = "horarios.json"
-        self.__objetos = []
-        self.__abrir()
-
-    def inserir(self, obj):
-        proximo_id = max(
-            (item.get_id() for item in self.__objetos),
-            default=0
-        ) + 1
-
-        obj.set_id(proximo_id)
-        self.__objetos.append(obj)
-        self.__salvar()
-
-    def listar(self):
-        return list(self.__objetos)
-
-    def listar_id(self, id):
-        for obj in self.__objetos:
-            if obj.get_id() == id:
-                return obj
-        return None
-
-    def atualizar(self, obj):
-        for i, atual in enumerate(self.__objetos):
-            if atual.get_id() == obj.get_id():
-                self.__objetos[i] = obj
-                self.__salvar()
-                return
-
-    def excluir(self, id):
-        obj = self.listar_id(id)
-
-        if obj is not None:
-            self.__objetos.remove(obj)
-            self.__salvar()
-
-    def __abrir(self):
+class HorarioDAO(DAO):
+    def abrir(self):
         try:
             with open(
-                self.__arquivo,
+                "horarios.json",
                 "r",
                 encoding="utf-8"
             ) as arquivo:
                 lista = json.load(arquivo)
         except (FileNotFoundError, json.JSONDecodeError):
+            self._objetos = []
             return
 
-        self.__objetos = [
+        self._objetos = [
             Horario.from_json(dicionario)
             for dicionario in lista
         ]
 
-    def __salvar(self):
+    def salvar(self):
         with open(
-            self.__arquivo,
+            "horarios.json",
             "w",
             encoding="utf-8"
         ) as arquivo:
             json.dump(
-                [obj.to_json() for obj in self.__objetos],
+                [obj.to_json() for obj in self._objetos],
                 arquivo,
                 ensure_ascii=False,
                 indent=2
