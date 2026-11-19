@@ -1,5 +1,6 @@
 import json
-from models.dao import DAO
+
+from dao_json.dao import DAO
 from models.profissional import Profissional
 
 
@@ -23,5 +24,5 @@ class ProfissionalDAO(DAO):
                 [obj.to_json() for obj in self._objetos],
                 arquivo,
                 ensure_ascii=False,
-                indent=2
+                indent=2,
             )

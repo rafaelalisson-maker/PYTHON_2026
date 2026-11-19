@@ -1,14 +1,14 @@
 import datetime
 from models.cliente import Cliente
-from models.ClienteDao import ClienteDAO
+from dao_sql.clientedao import ClienteDAO
 from models.servico import Servico
-from models.servicodao import ServicoDAO
+from dao_json.servicodao import ServicoDAO
 from models.horario import Horario
-from models.horariodao import HorarioDAO
+from dao_json.horariodao import HorarioDAO
 from models.atendimento import Atendimento
-from models.atendimentoDao import AtendimentoDAO
+from dao_json.atendimentodao import AtendimentoDAO
 from models.profissional import Profissional
-from models.profissionalDao import ProfissionalDAO
+from dao_json.profissionaldao import ProfissionalDAO
 
 
 class Service:

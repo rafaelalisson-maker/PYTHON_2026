@@ -1,28 +1,17 @@
-
-import json
-from models.dao import DAO
+from dao_sql.dao import DAO
 from models.atendimento import Atendimento
 
 
 class AtendimentoDAO(DAO):
-    def abrir(self):
-        try:
-            with open("atendimentos.json", "r", encoding="utf-8") as arquivo:
-                lista = json.load(arquivo)
-        except (FileNotFoundError, json.JSONDecodeError):
-            self._objetos = []
-            return
+    tabela = "atendimento"
+    colunas = (
+        "data",
+        "queixa_principal",
+        "historico_saude",
+        "avaliacao",
+        "prescricao",
+        "id_horario",
+    )
 
-        self._objetos = [
-            Atendimento.from_json(dicionario)
-            for dicionario in lista
-        ]
-
-    def salvar(self):
-        with open("atendimentos.json", "w", encoding="utf-8") as arquivo:
-            json.dump(
-                [obj.to_json() for obj in self._objetos],
-                arquivo,
-                ensure_ascii=False,
-                indent=2
-            )
+    def _objeto_da_linha(self, linha):
+        return Atendimento.from_json(linha)

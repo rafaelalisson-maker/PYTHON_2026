@@ -17,7 +17,7 @@ class DAO(ABC):
     def inserir(self, obj):
         maior_id = max(
             (item.get_id() for item in self._objetos),
-            default=0
+            default=0,
         )
         obj.set_id(maior_id + 1)
         self._objetos.append(obj)

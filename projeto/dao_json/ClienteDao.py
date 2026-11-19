@@ -1,4 +1,5 @@
 import json
+
 from models.cliente import Cliente
 
 
@@ -11,7 +12,7 @@ class ClienteDAO:
     def inserir(self, obj):
         maior_id = max(
             (cliente.get_id() for cliente in self.__objetos),
-            default=0
+            default=0,
         )
         obj.set_id(maior_id + 1)
         self.__objetos.append(obj)
@@ -56,5 +57,5 @@ class ClienteDAO:
                 [obj.to_json() for obj in self.__objetos],
                 arquivo,
                 ensure_ascii=False,
-                indent=2
+                indent=2,
             )
