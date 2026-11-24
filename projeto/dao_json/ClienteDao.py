@@ -2,7 +2,6 @@ import json
 
 from models.cliente import Cliente
 
-
 class ClienteDAO:
     def __init__(self):
         self.__arquivo = "clientes.json"

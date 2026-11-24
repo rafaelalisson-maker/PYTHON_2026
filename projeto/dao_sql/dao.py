@@ -1,7 +1,6 @@
 import sqlite3
 from abc import ABC, abstractmethod
 
-
 class DAO(ABC):
     conn = None
     nome_bd = "agenda.db"

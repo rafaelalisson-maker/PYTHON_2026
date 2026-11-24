@@ -14,11 +14,23 @@ class PerfilProfissionalUI:
         email = st.text_input("Informe o novo e-mail", op.get_email())
         especialidade = st.text_input("Informe a nova especialidade", op.get_especialidade())
         senha = st.text_input("Informe a nova senha", op.get_senha(),type="password")
+        if op.get_foto():
+            st.image(op.get_foto(), width=150)
+        arquivo_foto = st.file_uploader(
+            "Nova foto",
+            type=["jpg", "jpeg", "png", "webp"],
+            key=f"perfil_profissional_foto_{op.get_id()}",
+        )
         if st.button("Atualizar"):
             id = op.get_id()
             try:
                 Service.profissional_atualizar(
-                    id, nome, email, especialidade, senha
+                    id,
+                    nome,
+                    email,
+                    especialidade,
+                    senha,
+                    arquivo_foto.getvalue() if arquivo_foto else None,
                 )
             except ValueError as exc:
                 st.error(str(exc))

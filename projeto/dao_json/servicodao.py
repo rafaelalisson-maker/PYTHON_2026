@@ -1,8 +1,6 @@
 import json
-
 from dao_json.dao import DAO
 from models.servico import Servico
-
 
 class ServicoDAO(DAO):
     def abrir(self):

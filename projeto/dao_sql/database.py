@@ -25,10 +25,17 @@ class Database:
                 nome TEXT NOT NULL,
                 email TEXT NOT NULL,
                 fone TEXT,
-                senha TEXT NOT NULL
+                senha TEXT NOT NULL,
+                foto TEXT
             );
             """
         )
+        colunas_cliente = {
+            linha[1]
+            for linha in cls.conn.execute("PRAGMA table_info(cliente)").fetchall()
+        }
+        if "foto" not in colunas_cliente:
+            cls.execute("ALTER TABLE cliente ADD COLUMN foto TEXT")
         cls.execute(
             """
             CREATE TABLE IF NOT EXISTS profissional (

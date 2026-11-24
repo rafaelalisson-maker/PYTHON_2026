@@ -37,7 +37,13 @@ class ManterClienteUI:
             lista_dict = []
 
             for obj in clientes:
-                lista_dict.append(obj.to_json())
+                lista_dict.append(
+                    {
+                        chave: valor
+                        for chave, valor in obj.to_json().items()
+                        if chave != "foto"
+                    }
+                )
 
             df = pd.DataFrame(lista_dict)
             st.dataframe(df)
@@ -48,10 +54,16 @@ class ManterClienteUI:
         email = st.text_input("Informe o e-mail")
         fone = st.text_input("Informe o fone")
         senha = st.text_input("Informe a senha", type="password")
+        arquivo_foto = st.file_uploader(
+            "Foto do cliente",
+            type=["jpg", "jpeg", "png", "webp"],
+            key="novo_cliente_foto",
+        )
 
         if st.button("Inserir"):
             try:
-                Service.cliente_inserir(nome, email, fone, senha)
+                foto = arquivo_foto.getvalue() if arquivo_foto else None
+                Service.cliente_inserir(nome, email, fone, senha, foto)
             except ValueError as exc:
                 st.error(str(exc))
             else:
@@ -85,6 +97,13 @@ class ManterClienteUI:
                 "Novo fone",
                 op.get_fone()
             )
+            if op.get_foto():
+                st.image(op.get_foto(), width=150)
+            arquivo_foto = st.file_uploader(
+                "Nova foto do cliente",
+                type=["jpg", "jpeg", "png", "webp"],
+                key=f"cliente_foto_{op.get_id()}",
+            )
 
             if st.button("Atualizar"):
                 cliente_id = op.get_id()
@@ -95,7 +114,8 @@ class ManterClienteUI:
                         nome,
                         email,
                         fone,
-                        op.get_senha()
+                        op.get_senha(),
+                        arquivo_foto.getvalue() if arquivo_foto else None,
                     )
                 except ValueError as exc:
                     st.error(str(exc))

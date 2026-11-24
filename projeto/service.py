@@ -10,7 +10,6 @@ from dao_json.atendimentodao import AtendimentoDAO
 from models.profissional import Profissional
 from dao_json.profissionaldao import ProfissionalDAO
 
-
 class Service:
 
     @staticmethod
@@ -43,8 +42,8 @@ class Service:
             raise ValueError("Já existe um profissional com este e-mail.")
 
     @staticmethod
-    def cliente_inserir(nome, email, fone, senha):
-        cliente = Cliente(0, nome, email, fone, senha)
+    def cliente_inserir(nome, email, fone, senha, foto=None):
+        cliente = Cliente(0, nome, email, fone, senha, foto)
         Service._validar_email_cliente(cliente.get_email())
         ClienteDAO().inserir(cliente)
 
@@ -57,8 +56,11 @@ class Service:
         return ClienteDAO().listar_id(id)
 
     @staticmethod
-    def cliente_atualizar(id, nome, email, fone, senha):
-        cliente = Cliente(id, nome, email, fone, senha)
+    def cliente_atualizar(id, nome, email, fone, senha, foto=None):
+        atual = ClienteDAO().listar_id(id)
+        if foto is None and atual is not None:
+            foto = atual.get_foto()
+        cliente = Cliente(id, nome, email, fone, senha, foto)
         Service._validar_email_cliente(cliente.get_email(), id)
         ClienteDAO().atualizar(cliente)
 
@@ -272,6 +274,40 @@ class Service:
         return AtendimentoDAO().listar()
 
     @staticmethod
+    def atendimento_totalizar_por_profissional(data_inicio, data_fim):
+        if data_inicio > data_fim:
+            raise ValueError(
+                "A data inicial deve ser anterior ou igual à data final."
+            )
+
+        profissionais = Service.profissional_listar()
+        totais = {
+            profissional.get_id(): 0
+            for profissional in profissionais
+        }
+        horarios = {
+            horario.get_id(): horario
+            for horario in Service.horario_listar()
+        }
+
+        for atendimento in Service.atendimento_listar():
+            if not data_inicio <= atendimento.get_data().date() <= data_fim:
+                continue
+
+            horario = horarios.get(atendimento.get_id_horario())
+            if horario is None:
+                continue
+
+            id_profissional = horario.get_id_profissional()
+            if id_profissional in totais:
+                totais[id_profissional] += 1
+
+        return [
+            (profissional, totais[profissional.get_id()])
+            for profissional in profissionais
+        ]
+
+    @staticmethod
     def atendimento_listar_id(id):
         return AtendimentoDAO().listar_id(id)
 
@@ -291,8 +327,10 @@ class Service:
         AtendimentoDAO().excluir(id)
 
     @staticmethod
-    def profissional_inserir(nome, email, especialidade, senha):
-        profissional = Profissional(0, nome, email, especialidade, senha)
+    def profissional_inserir(nome, email, especialidade, senha, foto=None):
+        profissional = Profissional(
+            0, nome, email, especialidade, senha, foto
+        )
         Service._validar_email_profissional(profissional.get_email())
         ProfissionalDAO().inserir(profissional)
 
@@ -312,8 +350,15 @@ class Service:
         return ProfissionalDAO().listar_id(id)
 
     @staticmethod
-    def profissional_atualizar(id, nome, email, especialidade, senha):
-        profissional = Profissional(id, nome, email, especialidade, senha)
+    def profissional_atualizar(
+        id, nome, email, especialidade, senha, foto=None
+    ):
+        atual = Service.profissional_listar_id(id)
+        if foto is None and atual is not None:
+            foto = atual.get_foto()
+        profissional = Profissional(
+            id, nome, email, especialidade, senha, foto
+        )
         Service._validar_email_profissional(profissional.get_email(), id)
         ProfissionalDAO().atualizar(profissional)
 

@@ -15,6 +15,9 @@ from templates.visualizarminhaagendaui import VisualizarMinhaAgendaUI
 from templates.confirmarservicoui import ConfirmarServicoUI
 from templates.listarhorariosconfirmadoshojeui import ListarHorariosConfirmadosHojeUI
 from templates.listaragendaprofissionalui import ListarAgendaProfissionalUI
+from templates.totalizaratendimentosprofissionaisui import (
+    TotalizarAtendimentosProfissionaisUI,
+)
 from service import Service
 
 
@@ -72,6 +75,7 @@ class IndexUI:
                 "Atendimentos",
                 "Horários Confirmados Hoje",
                 "Agenda do Profissional",
+                "Totalizar Atendimentos dos Profissionais",
             ],
         )
         if op == "Clientes":
@@ -88,6 +92,8 @@ class IndexUI:
             ListarHorariosConfirmadosHojeUI.main()
         if op == "Agenda do Profissional":
             ListarAgendaProfissionalUI.main()
+        if op == "Totalizar Atendimentos dos Profissionais":
+            TotalizarAtendimentosProfissionaisUI.main()
 
     @staticmethod
     def sair_do_sistema():
